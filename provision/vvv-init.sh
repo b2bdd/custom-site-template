@@ -21,12 +21,12 @@ touch ${VVV_PATH_TO_SITE}/log/error.log
 touch ${VVV_PATH_TO_SITE}/log/access.log
 
 # Install and configure the latest stable version of WordPress
-if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-load.php" ]]; then
+if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-load.php" ]]; then
     echo "Downloading WordPress..."
 	noroot wp core download --version="${WP_VERSION}"
 fi
 
-if [[ ! -f "${VVV_PATH_TO_SITE}/public_html/wp-config.php" ]]; then
+if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-config.php" ]]; then
   echo "Configuring WordPress Stable..."
   noroot wp core config --dbname="${DB_NAME}" --dbuser=wp --dbpass=wp --quiet --extra-php <<PHP
 define( 'WP_DEBUG', true );
@@ -44,10 +44,52 @@ if ! $(noroot wp core is-installed); then
     INSTALL_COMMAND="install"
   fi
 
-  noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=admin --admin_email="admin@local.test" --admin_password="password"
+  noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password"
+
+  echo "- Setting Permalink Structure..."
+  noroot wp option update permalink_structure "/news/%postname%/"
+
+  echo "- Setting General Settings..."
+  noroot wp option update date_format "F j, Y"
+  noroot wp option update timezone_string "America/New York"
+  noroot wp option update gmt_offset "-5"
+  noroot wp option update start_of_week "1"
+  noroot wp option update time_format "g:i"
+  noroot wp option update users_can_register "0"
+  noroot wp option update gzipcompression "1"
+  noroot wp option update WPLANG "en_US"
+
+  echo "- Setting Reading Settings..."
+  noroot wp option update blog_public "0"
+
+  echo "- Setting Discussion Settings..."
+  noroot wp option update close_comments_days_old "0"
+  noroot wp option update close_comments_for_old_posts "1"
+  noroot wp option update comment_moderation "1"
+  noroot wp option update comment_registration "1"
+  noroot wp option update default_comment_status "closed"
+  noroot wp option update default_ping_status "closed"
+  noroot wp option update show_avatars "0"
+
+  echo "- Setting Media Settings..."
+  noroot wp option update thumbnail_crop "0"
+  noroot wp option update uploads_use_yearmonth_folders "0"
+
+  echo "- Uninstalling and Deleting default plugins..."
+  noroot wp plugin uninstall hello --deactivate
+  noroot wp plugin delete hello
+  noroot wp plugin uninstall akismet --deactivate
+  noroot wp plugin delete akismet
+
+  echo "- Installing and Activating plugins..."
+  for plugin in "disable-comments" "tiny-compress-images" "bulk-page-creator" "tinymce-advanced" "custom-upload-dir" "google-sitemap-generator" "favicon-by-realfavicongenerator" "query-monitor" "https://github.com/wp-premium/advanced-custom-fields-pro/archive/master.zip"
+    do
+      noroot wp plugin install $plugin --activate
+  done
+
 else
   echo "Updating WordPress Stable..."
-  cd ${VVV_PATH_TO_SITE}/public_html
+  cd ${VVV_PATH_TO_SITE}/htdocs
   noroot wp core update --version="${WP_VERSION}"
 fi
 
