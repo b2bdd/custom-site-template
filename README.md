@@ -1,13 +1,5 @@
-# VVV Custom site template
-For when you just need a simple dev site
-
-## Overview
-This template will allow you to create a WordPress dev environment using only `vvv-custom.yml`.
-
-The supported environments are:
-- A single site
-- A subdomain multisite
-- A subdirectory multisite
+# B2B Design & Development VVV Custom site template
+Customized for standard B2B development
 
 # Configuration
 
@@ -15,57 +7,12 @@ The supported environments are:
 
 ```
 my-site:
-  repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template
+  repo: https://github.com/b2bdd/custom-site-template.git
   hosts:
     - my-site.test
 ```
-| Setting    | Value       |
-|------------|-------------|
-| Domain     | my-site.test |
-| Site Title | my-site.test |
-| DB Name    | my-site     |
-| Site Type  | Single      |
-| WP Version | Latest      |
 
-### Minimal configuration with custom domain and WordPress Nightly:
-
-```
-my-site:
-  repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template
-  hosts:
-    - foo.test
-  custom:
-    wp_version: nightly
-```
-| Setting    | Value       |
-|------------|-------------|
-| Domain     | foo.test     |
-| Site Title | foo.test     |
-| DB Name    | my-site     |
-| Site Type  | Single      |
-| WP Version | Nightly     |
-
-### WordPress Multisite with Subdomains:
-
-```
-my-site:
-  repo: https://github.com/Varying-Vagrant-Vagrants/custom-site-template
-  hosts:
-    - multisite.test
-    - site1.multisite.test
-    - site2.multisite.test
-  custom:
-    wp_type: subdomain
-```
-| Setting    | Value               |
-|------------|---------------------|
-| Domain     | multisite.test      |
-| Site Title | multisite.test      |
-| DB Name    | my-site             |
-| Site Type  | Subdomain Multisite |
-| WP Version | Nightly             |
-
-## Configuration Options
+## Standard Configuration Options
 
 ```
 hosts:
@@ -73,7 +20,7 @@ hosts:
     - bar.test
     - baz.test
 ```
-Defines the domains and hosts for VVV to listen on. 
+Defines the domains and hosts for VVV to listen on.
 The first domain in this list is your sites primary domain.
 
 ```
@@ -111,3 +58,39 @@ custom:
 Defines the DB name for the installation.
 
 
+## Wordmove Options
+
+```
+staging_database: db_name
+```
+Defines database name used on staging server WordPress site.
+
+```
+staging_database_user: username
+```
+Defines database user used on staging server WordPress site.
+
+```
+staging_database_pass: password
+```
+Defines database user password used on staging server WordPress site.
+
+```
+staging_server_path: /path/to/wordpress
+```
+Defines path to the wordpress installation on staging server.
+
+```
+staging_server: 1.2.3.4
+```
+Defines the ip address of staging server.
+
+```
+staging_server_user: ssh_username
+```
+Defines username for logging into staging server
+
+```
+staging_server_pass: ssh_password
+```
+Defines password used for logging into staging server

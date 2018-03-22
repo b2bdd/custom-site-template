@@ -6,6 +6,13 @@ DOMAINS=`get_hosts "${DOMAIN}"`
 SITE_TITLE=`get_config_value 'site_title' "${DOMAIN}"`
 WP_VERSION=`get_config_value 'wp_version' 'latest'`
 WP_TYPE=`get_config_value 'wp_type' "single"`
+STAGING_DB_NAME=`get_config_value 'staging_database' "${VVV_SITE_NAME}"`
+STAGING_DB_USER=`get_config_value 'staging_database_user' "${VVV_SITE_NAME}"`
+STAGING_DB_PASS=`get_config_value 'staging_database_pass' "${VVV_SITE_NAME}"`
+STAGING_SERVER_PATH=`get_config_value 'staging_server_path' '/full/server/path/here'`
+STAGING_SERVER=`get_config_value 'staging_server' '1.2.3.4'`
+STAGING_SERVER_USER=`get_config_value 'staging_server_user' 'username'`
+STAGING_SERVER_PASS=`get_config_value 'staging_server_pass' 'password'`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
 
@@ -20,10 +27,24 @@ mkdir -p ${VVV_PATH_TO_SITE}/log
 touch ${VVV_PATH_TO_SITE}/log/error.log
 touch ${VVV_PATH_TO_SITE}/log/access.log
 
+# Create Movefile for wordmove
+if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/Movefile" ]]; then
+    echo "Creating Movefile..."
+    cp -f "${VVV_PATH_TO_SITE}/provision/wordmove.yml" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{SITENAME}}/${VVV_SITE_NAME}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{SERVERPATH}}/${STAGING_SERVER_PATH}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{STAGEDB}}/${STAGING_DB_NAME}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{STAGEDBUSER}}/${STAGING_DB_USER}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{STAGEDBPASS}}/${STAGING_DB_PASS}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{SSHHOST}}/${STAGING_SERVER}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{SSHUSER}}/${STAGING_SERVER_USER}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s/{{SSHPASSWORD}}/${STAGING_SERVER_PASS}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+fi
+
 # Install and configure the latest stable version of WordPress
 if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-load.php" ]]; then
     echo "Downloading WordPress..."
-	noroot wp core download --version="${WP_VERSION}"
+	noroot wp core download --version="${WP_VERSION}" --skip-plugins
 fi
 
 if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-config.php" ]]; then
@@ -45,6 +66,9 @@ if ! $(noroot wp core is-installed); then
   fi
 
   noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password"
+
+  echo "- Creating Additional Users"
+  noroot wp user create "${VVV_SITE_NAME}" --role=administrator --user_pass="password"
 
   echo "- Setting Permalink Structure..."
   noroot wp option update permalink_structure "/news/%postname%/"
@@ -74,12 +98,6 @@ if ! $(noroot wp core is-installed); then
   echo "- Setting Media Settings..."
   noroot wp option update thumbnail_crop "0"
   noroot wp option update uploads_use_yearmonth_folders "0"
-
-  echo "- Uninstalling and Deleting default plugins..."
-  noroot wp plugin uninstall hello --deactivate
-  noroot wp plugin delete hello
-  noroot wp plugin uninstall akismet --deactivate
-  noroot wp plugin delete akismet
 
   echo "- Installing and Activating plugins..."
   for plugin in "disable-comments" "tiny-compress-images" "bulk-page-creator" "tinymce-advanced" "custom-upload-dir" "google-sitemap-generator" "favicon-by-realfavicongenerator" "query-monitor" "https://github.com/wp-premium/advanced-custom-fields-pro/archive/master.zip"
