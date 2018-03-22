@@ -29,7 +29,7 @@ touch ${VVV_PATH_TO_SITE}/log/access.log
 
 # Install and configure the latest stable version of WordPress
 if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-load.php" ]]; then
-    echo "Downloading WordPress..."
+  echo "Downloading WordPress..."
 	noroot wp core download --version="${WP_VERSION}" --skip-plugins
 fi
 
@@ -51,10 +51,10 @@ if ! $(noroot wp core is-installed); then
     INSTALL_COMMAND="install"
   fi
 
-  noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password"
+  noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password" --skip-plugins
 
   echo "- Creating Additional Users"
-  noroot wp user create "${VVV_SITE_NAME}" --role=administrator --user_pass="password"
+  noroot wp user create "${VVV_SITE_NAME}" info@b2bdd.com --role=administrator --user_pass="password"
 
   echo "- Setting Permalink Structure..."
   noroot wp option update permalink_structure "/news/%postname%/"
