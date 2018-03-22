@@ -30,7 +30,7 @@ touch ${VVV_PATH_TO_SITE}/log/access.log
 # Install and configure the latest stable version of WordPress
 if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-load.php" ]]; then
   echo "Downloading WordPress..."
-	noroot wp core download --version="${WP_VERSION}" --skip-plugins
+	noroot wp core download --version="${WP_VERSION}"
 fi
 
 if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/wp-config.php" ]]; then
@@ -51,7 +51,7 @@ if ! $(noroot wp core is-installed); then
     INSTALL_COMMAND="install"
   fi
 
-  noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password" --skip-plugins
+  noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password"
 
   echo "- Creating Additional Users"
   noroot wp user create "${VVV_SITE_NAME}" info@b2bdd.com --role=administrator --user_pass="password"
@@ -84,6 +84,12 @@ if ! $(noroot wp core is-installed); then
   echo "- Setting Media Settings..."
   noroot wp option update thumbnail_crop "0"
   noroot wp option update uploads_use_yearmonth_folders "0"
+
+  echo "- Uninstalling and Deleting default plugins..."
+  noroot wp plugin uninstall hello --deactivate
+  noroot wp plugin delete hello
+  noroot wp plugin uninstall akismet --deactivate
+  noroot wp plugin delete akismet
 
   echo "- Installing and Activating plugins..."
   for plugin in "disable-comments" "tiny-compress-images" "bulk-page-creator" "tinymce-advanced" "custom-upload-dir" "google-sitemap-generator" "favicon-by-realfavicongenerator" "query-monitor" "https://github.com/wp-premium/advanced-custom-fields-pro/archive/master.zip"
