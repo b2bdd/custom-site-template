@@ -33,8 +33,8 @@ staging:
     - "wp-config.php"
     - "wp-content/*.sql"
     - "wp-content/*.sql.gz"
-    - "wp-content/uploads/backupbuddy_backups"
-    - "wp-content/uploads/backupbuddy_temp"
+    - "backupbuddy_backups"
+    - "backupbuddy_temp"
 
   ssh:
     host: "{{SSHHOST}}"
