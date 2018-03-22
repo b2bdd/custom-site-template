@@ -59,38 +59,19 @@ Defines the DB name for the installation.
 
 
 ## Wordmove Options
+Use the following variables under custom to customize the Movefile included with the new site. Any variables which include special characters should be wrapped in double quotes, i.e. "!43dmISlso&%dBVs"
 
 ```
-staging_database: db_name
+client_name:
+  repo: https://github.com/b2bdd/custom-site-template.git
+  hosts:
+    - my-site.test
+  custom:
+    staging_database: db_name
+    staging_database_user: username
+    staging_database_pass: password
+    staging_server_path: /path/to/wordpress
+    staging_server: 1.2.3.4
+    staging_server_user: ssh_username
+    staging_server_pass: ssh_password
 ```
-Defines database name used on staging server WordPress site.
-
-```
-staging_database_user: username
-```
-Defines database user used on staging server WordPress site.
-
-```
-staging_database_pass: password
-```
-Defines database user password used on staging server WordPress site.
-
-```
-staging_server_path: /path/to/wordpress
-```
-Defines path to the wordpress installation on staging server.
-
-```
-staging_server: 1.2.3.4
-```
-Defines the ip address of staging server.
-
-```
-staging_server_user: ssh_username
-```
-Defines username for logging into staging server
-
-```
-staging_server_pass: ssh_password
-```
-Defines password used for logging into staging server
