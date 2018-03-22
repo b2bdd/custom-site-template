@@ -54,7 +54,7 @@ if ! $(noroot wp core is-installed); then
   noroot wp core ${INSTALL_COMMAND} --url="${DOMAIN}" --quiet --title="${SITE_TITLE}" --admin_name=b2bdd --admin_email="info@b2bdd.com" --admin_password="password"
 
   echo "- Creating Additional Users"
-  noroot wp user create "${VVV_SITE_NAME}" info@b2bdd.com --role=administrator --user_pass="password"
+  noroot wp user create "${VVV_SITE_NAME}" admin@"${DOMAIN}" --role=administrator --user_pass="password"
 
   echo "- Setting Permalink Structure..."
   noroot wp option update permalink_structure "/news/%postname%/"
