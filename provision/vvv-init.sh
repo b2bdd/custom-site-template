@@ -31,14 +31,14 @@ touch ${VVV_PATH_TO_SITE}/log/access.log
 if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/Movefile" ]]; then
     echo "Creating Movefile..."
     cp -f "${VVV_PATH_TO_SITE}/provision/wordmove.yml" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{SITENAME}}/${VVV_SITE_NAME}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{SERVERPATH}}/${STAGING_SERVER_PATH}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{STAGEDB}}/${STAGING_DB_NAME}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{STAGEDBUSER}}/${STAGING_DB_USER}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{STAGEDBPASS}}/${STAGING_DB_PASS}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{SSHHOST}}/${STAGING_SERVER}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{SSHUSER}}/${STAGING_SERVER_USER}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s/{{SSHPASSWORD}}/${STAGING_SERVER_PASS}/" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{SITENAME}}#${VVV_SITE_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{SERVERPATH}}#${STAGING_SERVER_PATH}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{STAGEDB}}#${STAGING_DB_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{STAGEDBUSER}}#${STAGING_DB_USER}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{STAGEDBPASS}}#${STAGING_DB_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{SSHHOST}}#${STAGING_SERVER}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{SSHUSER}}#${STAGING_SERVER_USER}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+    sed -i "s#{{SSHPASSWORD}}#${STAGING_SERVER_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
 fi
 
 # Install and configure the latest stable version of WordPress
