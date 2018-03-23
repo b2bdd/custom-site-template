@@ -1,0 +1,79 @@
+global:
+  sql_adapter: "default"
+
+local:
+  vhost: "http://{{SITENAME}}.test"
+  wordpress_path: "/srv/www/{{SITENAME}}/htdocs"
+
+  database:
+    name: "{{SITENAME}}"
+    user: "wp"
+    password: "wp"
+    host: "localhost"
+
+staging:
+  vhost: "http://{{SITENAME}}.b2bdd.net"
+  wordpress_path: "{{SERVERPATH}}"
+
+  database:
+    name: "{{STAGEDB}}"
+    user: "{{STAGEDBUSER}}"
+    password: "{{STAGEDBPASS}}"
+    host: "localhost"
+
+  exclude:
+    - ".git/"
+    - ".gitignore"
+    - ".sass-cache/"
+    - "node_modules/"
+    - "bin/"
+    - "tmp/*"
+    - "Gemfile*"
+    - "Movefile"
+    - "wp-config.php"
+    - "wp-content/*.sql"
+    - "wp-content/*.sql.gz"
+    - "backupbuddy_backups"
+    - "backupbuddy_temp"
+
+  ssh:
+    host: "{{SSHHOST}}"
+    user: "{{SSHUSER}}"
+    password: "{{SSHPASSWORD}}" # password is optional, will use public keys if available.
+    port: 22 # Port is optional
+    rsync_options: "--chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r"
+
+production:
+  vhost: "{{PRODUCTIONURL}}"
+  wordpress_path: "{{PRODUCTIONSERVERPATH}}"
+
+  database:
+    name: "{{PRODUCTIONDB}}"
+    user: "{{PRODUCTIONDBUSER}}"
+    password: "{{PRODUCTIONDBPASS}}"
+    host: "localhost"
+
+  exclude:
+    - ".git/"
+    - ".gitignore"
+    - ".sass-cache/"
+    - "node_modules/"
+    - "bin/"
+    - "tmp/*"
+    - "Gemfile*"
+    - "Movefile"
+    - "movefile"
+    - "movefile.yml"
+    - "movefile.yaml"
+    - "wp-config.php"
+    - "wp-content/*.sql"
+    - "wp-content/*.sql.gz"
+    - "backupbuddy_backups"
+    - "backupbuddy_temp"
+
+  ssh:
+    host: "{{PRODUCTIONSSHHOST}}"
+    user: "{{PRODUCTIONSSHUSER}}"
+    password: "{{PRODUCTIONSSHPASSWORD}}" # password is optional, will use public keys if available.
+    port: 22 # Port is optional
+    rsync_options: "--chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r"
