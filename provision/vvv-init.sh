@@ -13,6 +13,14 @@ STAGING_SERVER_PATH=`get_config_value 'staging_server_path' '/full/server/path/h
 STAGING_SERVER=`get_config_value 'staging_server' '1.2.3.4'`
 STAGING_SERVER_USER=`get_config_value 'staging_server_user' 'username'`
 STAGING_SERVER_PASS=`get_config_value 'staging_server_pass' 'password'`
+PRODUCTION_URL=`get_config_value 'production_url' "${VVV_SITE_NAME}"`
+PRODUCTION_DB_NAME=`get_config_value 'production_database' "${VVV_SITE_NAME}"`
+PRODUCTION_DB_USER=`get_config_value 'production_database_user' "${VVV_SITE_NAME}"`
+PRODUCTION_DB_PASS=`get_config_value 'production_database_pass' "${VVV_SITE_NAME}"`
+PRODUCTION_SERVER_PATH=`get_config_value 'production_server_path' '/full/server/path/here'`
+PRODUCTION_SERVER=`get_config_value 'production_server' '1.2.3.4'`
+PRODUCTION_SERVER_USER=`get_config_value 'production_server_user' 'username'`
+PRODUCTION_SERVER_PASS=`get_config_value 'production_server_pass' 'password'`
 DB_NAME=`get_config_value 'db_name' "${VVV_SITE_NAME}"`
 DB_NAME=${DB_NAME//[\\\/\.\<\>\:\"\'\|\?\!\*-]/}
 
@@ -104,17 +112,25 @@ else
 fi
 
 # Create Movefile for wordmove
-if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/Movefile" ]]; then
-    echo "Creating Movefile..."
-    cp -f "${VVV_PATH_TO_SITE}/provision/wordmove.yml" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{SITENAME}}#${VVV_SITE_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{SERVERPATH}}#${STAGING_SERVER_PATH}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{STAGEDB}}#${STAGING_DB_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{STAGEDBUSER}}#${STAGING_DB_USER}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{STAGEDBPASS}}#${STAGING_DB_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{SSHHOST}}#${STAGING_SERVER}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{SSHUSER}}#${STAGING_SERVER_USER}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
-    sed -i "s#{{SSHPASSWORD}}#${STAGING_SERVER_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/Movefile"
+if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/movefile.yml" ]]; then
+    echo "Creating movefile.yml..."
+    cp -f "${VVV_PATH_TO_SITE}/provision/movefile.yml" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{SITENAME}}#${VVV_SITE_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{SERVERPATH}}#${STAGING_SERVER_PATH}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{STAGEDB}}#${STAGING_DB_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{STAGEDBUSER}}#${STAGING_DB_USER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{STAGEDBPASS}}#${STAGING_DB_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{SSHHOST}}#${STAGING_SERVER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{SSHUSER}}#${STAGING_SERVER_USER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{SSHPASSWORD}}#${STAGING_SERVER_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONURL}}#${PRODUCTION_URL}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONSERVERPATH}}#${PRODUCTION_SERVER_PATH}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONDB}}#${PRODUCTION_DB_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONDBUSER}}#${PRODUCTION_DB_USER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONDBPASS}}#${PRODUCTION_DB_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONSSHHOST}}#${PRODUCTION_SERVER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONSSHUSER}}#${PRODUCTION_SERVER_USER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{PRODUCTIONSSHPASSWORD}}#${PRODUCTION_SERVER_PASS}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
 fi
 
 cp -f "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf.tmpl" "${VVV_PATH_TO_SITE}/provision/vvv-nginx.conf"
