@@ -6,6 +6,7 @@ DOMAINS=`get_hosts "${DOMAIN}"`
 SITE_TITLE=`get_config_value 'site_title' "${DOMAIN}"`
 WP_VERSION=`get_config_value 'wp_version' 'latest'`
 WP_TYPE=`get_config_value 'wp_type' "single"`
+STAGING_URL=`get_config_value 'staging_url' "${VVV_SITE_NAME}".".b2bdd.net"`
 STAGING_DB_NAME=`get_config_value 'staging_database' "${VVV_SITE_NAME}"`
 STAGING_DB_USER=`get_config_value 'staging_database_user' "${VVV_SITE_NAME}"`
 STAGING_DB_PASS=`get_config_value 'staging_database_pass' "${VVV_SITE_NAME}"`
@@ -116,6 +117,7 @@ if [[ ! -f "${VVV_PATH_TO_SITE}/htdocs/movefile.yml" ]]; then
     echo "Creating movefile.yml..."
     cp -f "${VVV_PATH_TO_SITE}/provision/movefile.yml" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
     sed -i "s#{{SITENAME}}#${VVV_SITE_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
+    sed -i "s#{{STAGINGURL}}#${STAGING_URL}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
     sed -i "s#{{SERVERPATH}}#${STAGING_SERVER_PATH}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
     sed -i "s#{{STAGEDB}}#${STAGING_DB_NAME}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"
     sed -i "s#{{STAGEDBUSER}}#${STAGING_DB_USER}#" "${VVV_PATH_TO_SITE}/htdocs/movefile.yml"

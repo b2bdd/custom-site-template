@@ -12,7 +12,7 @@ local:
     host: "localhost"
 
 staging:
-  vhost: "http://{{SITENAME}}.b2bdd.net"
+  vhost: "{{STAGINGURL}}"
   wordpress_path: "{{SERVERPATH}}"
 
   database:
